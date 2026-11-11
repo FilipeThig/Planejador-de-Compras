@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Planejador de compras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header class="top">
+    <div>
+      <h1>Planejador de compras</h1>
+      <p class="sub">Cadastre o que pretende comprar e veja quanto vai sair do seu bolso em cada mês. As parcelas são contadas a partir do mês da compra.</p>
+    </div>
+    <div class="userbar"><span id="emailUsuario"></span><button type="button" class="sec" id="btnSolo" aria-pressed="false">Ver só gastos</button><button type="button" class="sec" id="btnLogout">Sair</button></div>
+  </header>
+
+  <p id="status" role="status" aria-live="polite">Carregando...</p>
+  <section class="panel" id="migracao" hidden>
+    <h2>Importar compras antigas</h2>
+    <p>Existem compras salvas neste navegador. Você pode importá-las para sua conta, sem apagar o histórico local.</p>
+    <button type="button" id="btnMigrar">Importar compras do navegador</button>
+  </section>
+  <div class="layout" id="layout" hidden>
+
+    <!-- COLUNA ESQUERDA: planejador -->
+    <div class="col-plan" id="colPlan">
+      <section class="panel" aria-labelledby="t-add">
+        <h2 id="t-add">Nova compra</h2>
+        <form id="form" autocomplete="off">
+          <div class="f w3"><label for="nome">Item</label><input id="nome" required maxlength="80" placeholder="Ex.: Notebook"></div>
+          <div class="f w3"><label for="valor">Valor total (R$)</label><input id="valor" type="number" step="0.01" min="0.01" inputmode="decimal" required placeholder="0,00"></div>
+          <div class="f w3"><label for="comodo">Cômodo</label>
+            <select id="comodo" required>
+              <option value="" disabled selected>Selecione</option>
+              <option value="cozinha">Cozinha</option>
+              <option value="quarto">Quarto</option>
+              <option value="banheiro">Banheiro</option>
+              <option value="sala">Sala</option>
+              <option value="outro">Outro</option>
+            </select></div>
+          <div class="f w3"><label for="data">Data da compra</label><input id="data" type="date" required></div>
+          <div class="f w6">
+            <fieldset style="border:0;padding:0;margin:0"><legend>Qual a necessidade deste item?</legend>
+            <div class="seg">
+              <label class="prio-opt"><input type="radio" name="prio" value="alta"> Alta</label>
+              <label class="prio-opt"><input type="radio" name="prio" value="media" checked> Média</label>
+              <label class="prio-opt"><input type="radio" name="prio" value="baixa"> Baixa</label>
+            </div></fieldset>
+          </div>
+          <div class="f w3">
+            <fieldset style="border:0;padding:0;margin:0"><legend>Pagamento</legend>
+            <div class="seg">
+              <label><input type="radio" name="pg" value="vista" checked> À vista</label>
+              <label><input type="radio" name="pg" value="parcelado"> Parcelado</label>
+            </div></fieldset>
+          </div>
+          <div class="f w3 hidden" id="parcWrap"><label for="parc">Número de parcelas</label><input id="parc" type="number" min="2" max="48" value="3" inputmode="numeric"><span class="hint" id="parcHint"></span></div>
+          <div class="f w6"><label for="url">Site da compra (opcional)</label><input id="url" type="text" inputmode="url" placeholder="loja.com.br"></div>
+          <div class="f w6"><button type="submit">Adicionar compra</button></div>
+        </form>
+      </section>
+
+      <section class="panel" aria-labelledby="t-lista">
+        <h2 id="t-lista">Compras planejadas</h2>
+        <div id="lista"></div>
+      </section>
+    </div>
+
+    <!-- COLUNA DIREITA: gastos e filtros -->
+    <div class="col-gastos">
+      <section class="panel" aria-labelledby="t-filtros">
+        <h2 id="t-filtros">Filtros</h2>
+        <div class="filters">
+          <div class="ff"><label for="fBusca">Buscar item</label><input id="fBusca" type="search" placeholder="Nome do item"></div>
+          <div class="ff"><label for="fCom">Cômodo</label>
+            <select id="fCom"><option value="">Todos</option><option value="cozinha">Cozinha</option><option value="quarto">Quarto</option><option value="banheiro">Banheiro</option><option value="sala">Sala</option><option value="outro">Outro</option></select></div>
+          <div class="ff"><label for="fPrio">Necessidade</label>
+            <select id="fPrio"><option value="">Todas</option><option value="alta">Alta</option><option value="media">Média</option><option value="baixa">Baixa</option></select></div>
+          <div class="ff"><label for="fPg">Pagamento</label>
+            <select id="fPg"><option value="">Todos</option><option value="vista">À vista</option><option value="parcelado">Parcelado</option></select></div>
+          <div class="ff"><label for="fDe">Do mês</label><input id="fDe" type="month"></div>
+          <div class="ff"><label for="fAte">Até o mês</label><input id="fAte" type="month"></div>
+          <button type="button" class="sec" id="fLimpar">Limpar filtros</button>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="t-pizza">
+        <h2 id="t-pizza">Gasto por cômodo</h2>
+        <div id="pizza"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="t-meses">
+        <h2 id="t-meses">Gasto por mês</h2>
+        <div class="totals" id="totals"></div>
+        <div id="meses"></div>
+      </section>
+    </div>
+
+  </div>
+</main>
+
+<footer>Feito por Filipe Thiago</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

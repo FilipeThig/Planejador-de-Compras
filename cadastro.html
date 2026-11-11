@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cadastrar | Planejador de compras</title><link rel="stylesheet" href="style.css"></head>
+<body><main class="auth-page"><section class="panel"><h1>Criar conta</h1><p class="sub">Organize suas compras em um espaço privado.</p>
+<form id="registerForm"><label for="email">E-mail</label><input id="email" type="email" autocomplete="email" required>
+<label for="password">Senha (mínimo de 6 caracteres)</label><input id="password" type="password" autocomplete="new-password" minlength="6" required>
+<button type="submit">Cadastrar</button></form><p id="message" class="auth-message" role="status" aria-live="polite"></p>
+<p class="auth-links">Já tem conta? <a href="login.html">Entrar</a></p></section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase.js"></script><script src="auth.js"></script></body></html>
